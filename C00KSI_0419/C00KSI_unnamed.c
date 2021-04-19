@@ -16,7 +16,7 @@ int main() {
 	   exit(-1);
      }
 
-     printf("%d: fd1: %d, fd2: %d\n",getpid(),pipefd[0],pipefd[1]);
+     
 
      cpid = fork();
      if (cpid == -1) {
@@ -25,34 +25,32 @@ int main() {
      }
 
      if (cpid == 0) {    
-	  
+	   
 	   close(pipefd[1]);    
 
-	
-	   while (read(pipefd[0], &buf, 1) > 0) {	
-		write(STDOUT_FILENO, &buf, 1);
+	   strcpy(szoveg,"Kovacs Sandor Gergo C00KSI\0");   
+	   printf("kuldom a szoveget: \n%s\n",szoveg);
 
-		write(STDOUT_FILENO, "\n", 1);
-		close (pipifd[0]);
-		_exit(EXIT_SUCCESS);	
-	   }
-	   
+	   write(pipefd[1], szoveg, strlen(szoveg));	
 
-	   	
+	   close(pipefd[0]); 
+
+   	   exit(0);
 
      } else {	
-	
+	  
 
    	   close(pipefd[0]);    
 
-	   strcpy(szoveg,"ez itt kerem egy szoveg\0");  
-	   printf("%d: kuldom a szoveget: %s:%d\n",getpid(),szoveg,strlen(szoveg));
+	   printf(" megnezem mi van a csoben\n ");
+	   while (read(pipefd[0], &buf, 1) > 0) {
+		 printf("\n%c",buf);
+	   }
+	  
 
-	   write(pipefd[1],argv[1], strlen(argv1));	
+	   close(pipefd[1]);	
 
-	   close(pipefd[1]);   
-
-	   wait(NULL);    
+	   wait(NULL);   
 
 	   exit(0);
      }
